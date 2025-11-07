@@ -48,8 +48,8 @@
                 <h2 class="text-xl font-semibold">메인 페이지</h2>
                 <p class="text-gray-700 mt-2">Dev-Class에 오신 것을 환영합니다.</p>
                 <p class="mt-4 text-sm text-gray-600">
-                    이 파일은 순수 HTML/CSS/JS로 작성된 **'인터랙티브 스토리보드'**입니다.<br>
-                    실제 JSP/Servlet 프로젝트의 UI 디자인 시안으로, 상단 탭을 클릭하여 페이지 구성을 확인할 수 있습니다.
+                    이 파일은 순수 HTML/CSS/JS로 작성된 '인터랙티브 스토리보드'입니다.<br>
+                    빠르게 잡은 JSP/Servlet 프로젝트의 UI 디자인 시안으로, 상단 탭을 클릭하여 페이지 구성을 확인할 수 있습니다.(추후 변경 될 예정입니다.)
                 </p>
             </div>
 
@@ -121,7 +121,7 @@
 
         <!-- (D) Footer (React의 footer와 동일) -->
         <footer class="bg-gray-50 border-t text-center py-3 text-sm text-gray-500">
-            © BP[학번] [본인이름]. All rights reserved. (HTML 인터랙티브 프로토타입)
+            © 2001380 박은호 All rights reserved. (HTML 인터랙티브 프로토타입)
         </footer>
     </div>
 
@@ -130,10 +130,7 @@
         // 현재 보여지는 뷰의 ID를 저장 (React의 'state' 역할)
         let currentViewId = 'view-home';
 
-        /**
-         * React의 setView()를 흉내 내는 함수
-         * @param {string} viewId - 보여줄 뷰의 ID (예: 'view-home')
-         */
+  
         function showView(viewId) {
             // 1. 현재 보여지고 있는 뷰를 숨김
             if (document.getElementById(currentViewId)) {
