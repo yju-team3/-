@@ -1,4 +1,3 @@
 # 개인프로젝트
 
-https://github.com/yju-team3/-/blob/main/docs/prototype.html
-(https://github.com/yju-team3/-/blob/main/docs/prototype.html)
+[🚀 인터랙티브 와이어프레임 실행](https://yju-team3.github.io/-/prototype.html)
