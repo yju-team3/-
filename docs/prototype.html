@@ -5,13 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dev-Class 스토리보드 (HTML 프로토타입)</title>
     
-    <!-- 1. Tailwind CSS 로드 (React의 className을 그대로 쓰기 위해) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
-        /* 2. React의 framer-motion 애니메이션(fade-in) 흉내내기
-           모든 '뷰' 컨텐츠는 기본적으로 숨겨둡니다.
-        */
+  
         .view-content {
             display: none; /* JS로 컨트롤하기 위해 기본 숨김 */
             animation: fadeIn 0.4s ease-in-out;
@@ -25,10 +22,7 @@
 </head>
 <body class="bg-gray-100 p-4 md:p-8">
 
-    <!-- 
-      3. React의 Card 컴포넌트를 흉내 낸 메인 카드 UI
-      (max-w-3xl mx-auto mt-6 shadow-lg border ...)
-    -->
+
     <div class="max-w-3xl mx-auto shadow-lg rounded-lg border border-gray-200 bg-white overflow-hidden">
         
         <!-- (A) Header (React의 header와 동일) -->
@@ -39,20 +33,14 @@
 
         <!-- (B) Nav (React의 nav와 동일) -->
         <nav class="bg-gray-100 border-b px-4 py-2 flex flex-wrap gap-4 text-sm">
-            <!-- 
-              [핵심!] React의 onClick={() => setView("...")}을
-              순수 JS 함수인 showView('...')로 대체합니다.
-            -->
+
             <span class="cursor-pointer hover:text-blue-600 font-medium" onclick="showView('view-home')">홈</span>
             <span class="cursor-pointer hover:text-blue-600" onclick="showView('view-product-list')">상품 목록</span>
             <span class="cursor-pointer hover:text-blue-600" onclick="showView('view-product-upload')">상품 등록</span>
             <span class="cursor-pointer hover:text-blue-600" onclick="alert('장바구니 페이지 프로토타입입니다.')">내 장바구니</span>
         </nav>
 
-        <!-- 
-          (C) Main (React의 renderContent() 영역)
-          모든 '뷰'를 미리 다 만들어두고, JS로 숨겼다 보였다 합니다.
-        -->
+    
         <main class="p-6 min-h-[50vh] bg-white">
             
             <!-- 1. 홈 뷰 (기본) -->
@@ -60,7 +48,7 @@
                 <h2 class="text-xl font-semibold">메인 페이지</h2>
                 <p class="text-gray-700 mt-2">Dev-Class에 오신 것을 환영합니다.</p>
                 <p class="mt-4 text-sm text-gray-600">
-                    이 파일은 순수 HTML/CSS/JS로 작성된 '인터랙티브 스토리보드'입니다.<br>
+                    이 파일은 순수 HTML/CSS/JS로 작성된 **'인터랙티브 스토리보드'**입니다.<br>
                     실제 JSP/Servlet 프로젝트의 UI 디자인 시안으로, 상단 탭을 클릭하여 페이지 구성을 확인할 수 있습니다.
                 </p>
             </div>
@@ -96,7 +84,6 @@
                     </tbody>
                 </table>
                 <div class="flex justify-end gap-3 mt-4">
-                    <!-- React의 Button 컴포넌트를 Tailwind로 흉내 -->
                     <button class="px-4 py-2 bg-gray-200 rounded-md text-sm font-medium hover:bg-gray-300" onclick="showView('view-home')">메인으로</button>
                     <button class="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700" onclick="showView('view-product-upload')">상품 등록</button>
                     <button class="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700">내 장바구니</button>
@@ -106,7 +93,6 @@
             <!-- 3. 상품 등록 뷰 -->
             <div id="view-product-upload" class="view-content">
                 <h2 class="text-xl font-semibold">디지털 상품 등록</h2>
-                <!-- form 태그의 onsubmit="return false;"는 프로토타입에서 폼 제출을 방지합니다. -->
                 <form class="space-y-3 mt-4" onsubmit="return false;">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">상품명</label>
@@ -139,9 +125,7 @@
         </footer>
     </div>
 
-    <!-- 
-      4. Vanilla JavaScript (React의 useState와 renderContent() 흉내내기)
-    -->
+  
     <script>
         // 현재 보여지는 뷰의 ID를 저장 (React의 'state' 역할)
         let currentViewId = 'view-home';
@@ -160,7 +144,7 @@
             const newView = document.getElementById(viewId);
             if (newView) {
                 newView.style.display = 'block';
-                // (애니메이션을 다시 적용하기 위해 클래스를 뺐다 붙이는 트릭)
+              
                 newView.classList.remove('view-content');
                 void newView.offsetWidth; // 브라우저 리플로우 강제
                 newView.classList.add('view-content');
