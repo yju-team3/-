@@ -5,6 +5,13 @@
 JSP 기반 쇼핑몰 구조를 설계하고, 사용자 흐름도 및 ERD를 Mermaid로 작성하였습니다.  
 또한 React 기반 인터랙티브 와이어프레임을 통해 실제 UI 흐름을 시각화하였습니다.
 
-- [Mermaid 다이어그램 보기](./docs/flowchart.md)
-* **[ 🔗 프로토타입 실행 (Click!)](https://htmlpreview.github.io/?https://github.com/yju-team3/dev-wireframe/blob/main/첨부자료/프로토타입.html)**
-- [프로젝트 보고서 PDF](https://github.com/yju-team3/dev-wireframe/blob/main/docs/report.pdf)
+## 5. 스토리보드
+
+### 5-1. 인터랙티브 프로토타입 (HTML)
+
+교수님께서 GitHub에서 바로 클릭하여 보실 수 있도록, HTML/CSS/JS로 제작한 '작동하는' 프로토타입을 첨부합니다.
+
+* **[ 🔗 프로토타입 실행 (Click!)](https://htmlpreview.github.io/?https://github.com/yju-team3/dev-wireframe/blob/main/첨부자료/인터랙티브 프로토타입.html)**
+
+---
+* **[ 🔗 프로토타입 원본 코드 보기 (GitHub)](./첨부자료/인터랙티브 프로토타입.html)**
