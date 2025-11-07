@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev-Class 인터랙티브 ERD</title>
+    
+    <!-- 1. Tailwind CSS 로드 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* 2. 커스텀 스타일 (ERD 전용) */
+
+        /* 테이블 카드 (노드) */
+        .table-card {
+            border: 2px solid #94a3b8; /* slate-400 */
+            border-radius: 8px; /* rounded-lg */
+            background-color: #f8fafc; /* slate-50 */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* shadow-md */
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        
+        /* 테이블 헤더 (이름) */
+        .table-header {
+            padding: 12px 16px; /* p-3 p-4 */
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 700; /* font-bold */
+            color: #1e293b; /* slate-800 */
+            border-bottom: 1px solid #e2e8f0; /* slate-200 */
+            background-color: white;
+            border-radius: 8px 8px 0 0;
+        }
+
+        /* 컬럼(속성) 목록 */
+        .table-columns {
+            padding: 16px; /* p-4 */
+            font-family: monospace; /* 폰트를 코딩용으로 */
+            font-size: 0.875rem; /* text-sm */
+            color: #334155; /* slate-700 */
+            line-height: 1.75; /* leading-loose */
+        }
+        
+        /* 컬럼(속성) 태그 */
+        .col-tag {
+            font-size: 0.75rem; /* text-xs */
+            font-weight: 600; /* font-semibold */
+            padding: 2px 6px; /* px-1.5 py-0.5 */
+            border-radius: 4px; /* rounded-md */
+            margin-left: 8px; /* ml-2 */
+        }
+        .col-pk { /* Primary Key */
+            background-color: #fef2f2; /* red-50 */
+            color: #b91c1c; /* red-700 */
+            border: 1px solid #fca5a5; /* red-300 */
+        }
+        .col-fk { /* Foreign Key */
+            background-color: #eef2ff; /* indigo-50 */
+            color: #3730a3; /* indigo-700 */
+            border: 1px solid #a5b4fc; /* indigo-300 */
+        }
+
+        /* 관계(선) 스타일 */
+        .relationship-line {
+            padding: 12px; /* p-3 */
+            border: 1px dashed #cbd5e1; /* slate-300 */
+            border-radius: 8px; /* rounded-lg */
+            background-color: #f1f5f9; /* slate-100 */
+            font-weight: 600; /* font-semibold */
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .relationship-line:hover {
+            border-style: solid;
+            border-color: #3b82f6; /* blue-500 */
+            background-color: white;
+        }
+
+        /* 활성화된 노드 (테이블/관계) */
+        .table-card.active, .relationship-line.active {
+            box-shadow: 0 0 0 3px #3b82f6, 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* blue-500 링 */
+            transform: scale(1.02);
+            border-color: #3b82f6 !important; /* blue-500 */
+        }
+
+        /* 설명 패널 P 태그 스타일 */
+        #inspector-details p {
+            margin-top: 8px; /* mt-2 */
+            font-size: 14px; /* text-sm */
+            color: #475569; /* slate-600 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden border border-gray-200">
+        
+        <!-- (A) 헤더 -->
+        <header class="bg-gray-800 text-white p-5 border-b border-gray-700">
+            <h1 class="text-2xl font-bold">Dev-Class 인터랙티브 ERD (데이터베이스 설계도)</h1>
+            <p class="text-sm text-gray-300">각 테이블(엔티티)과 관계(선)를 클릭하여 상세 설계를 확인하세요.</p>
+        </header>
+
+        <!-- (B) 메인 컨텐츠 (ERD + 설명 패널) -->
+        <div class="flex flex-col md:flex-row">
+            
+            <!-- (B-1) ERD 영역 -->
+            <div class="w-full md:w-2/3 p-6 space-y-6">
+                
+                <!-- 1. 테이블 (Entities) -->
+                <h2 class="text-lg font-semibold text-gray-700 border-b pb-2">1. 테이블 (Entities)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- User 테이블 -->
+                    <div id="node-table-user" class="table-card" onclick="showDetails('table-user')">
+                        <div class="table-header">User (사용자)</div>
+                        <div class="table-columns">
+                            user_id <span class="col-tag col-pk">PK</span><br>
+                            user_pw<br>
+                            user_name<br>
+                            reg_date
+                        </div>
+                    </div>
+                    
+                    <!-- Product 테이블 -->
+                    <div id="node-table-product" class="table-card" onclick="showDetails('table-product')">
+                        <div class="table-header">Product (상품)</div>
+                        <div class="table-columns">
+                            prod_id <span class="col-tag col-pk">PK</span><br>
+                            prod_name<br>
+                            prod_desc<br>
+                            prod_price<br>
+                            file_name_orig<br>
+                            file_name_saved<br>
+                            file_path<br>
+                            uploader_id <span class="col-tag col-fk">FK</span><br>
+                            reg_date
+                        </div>
+                    </div>
+                    
+                    <!-- Cart 테이블 -->
+                    <div id="node-table-cart" class="table-card" onclick="showDetails('table-cart')">
+                        <div class="table-header">Cart (장바구니)</div>
+                        <div class="table-columns">
+                            cart_id <span class="col-tag col-pk">PK</span><br>
+                            user_id <span class="col-tag col-fk">FK</span><br>
+                            prod_id <span class="col-tag col-fk">FK</span><br>
+                            quantity<br>
+                            reg_date
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <!-- 2. 관계 (Relationships) -->
+                <h2 class="text-lg font-semibold text-gray-700 border-b pb-2 mt-8">2. 관계 (Relationships)</h2>
+                <div class="space-y-4">
+                    
+                    <div id="node-rel-user-prod" class="relationship-line" onclick="showDetails('rel-user-prod')">
+                        User (1) → (N) Product
+                    </div>
+                    
+                    <div id="node-rel-user-cart" class="relationship-line" onclick="showDetails('rel-user-cart')">
+                        User (1) → (N) Cart
+                    </div>
+                    
+                    <div id="node-rel-prod-cart" class="relationship-line" onclick="showDetails('rel-prod-cart')">
+                        Product (1) → (N) Cart
+                    </div>
+                    
+                </div>
+                
+            </div>
+            
+            <!-- (B-2) 설명 패널 (Inspector) -->
+            <aside class="w-full md:w-1/3 bg-gray-50 p-6 border-l border-gray-200">
+                <h3 class="text-xl font-semibold text-gray-800">설계 의도 (Inspector)</h3>
+                <div id="inspector-details" class="mt-4 p-4 min-h-[300px] bg-white rounded-md border border-gray-300 shadow-inner">
+                    <!-- JS가 이 안에 내용을 채울 것입니다 -->
+                    <p id="inspector-default" class="text-gray-500">테이블 또는 관계(선)를 클릭하면 '설계 의도'가 나타납니다.</p>
+                    
+                    <!-- 각 단계별 설명 (숨겨진 템플릿) -->
+                    <div id="details-table-user" class="hidden">
+                        <h4 class="font-bold text-lg text-red-700">User (사용자)</h4>
+                        <p><b>[설계 의도]</b><br>
+                           모든 데이터의 '주체(Subject)'입니다. `user_id` (PK)는 `Product`와 `Cart` 테이블의 '주인'이 누구인지 식별하는 핵심 키(FK)가 됩니다.</p>
+                        <p><b>[핵심 컬럼]</b><br>
+                           - `user_id (PK)`: 사용자를 식별하는 기본 키.</p>
+                    </div>
+                    
+                    <div id="details-table-product" class="hidden">
+                        <h4 class="font-bold text-lg text-red-700">Product (상품)</h4>
+                        <p><b>[설계 의도]</b><br>
+                           '게시판'의 응용입니다. `file_...` 관련 컬럼을 통해 '디지털 콘텐츠'라는 무형의 상품을 관리합니다.</p>
+                        <p><b>[핵심 컬럼]</b><br>
+                           - `prod_id (PK)`: 상품을 식별하는 기본 키.<br>
+                           - `uploader_id (FK)`: `User` 테이블을 참조합니다. "이 상품을 누가 등록했는가?"를 알기 위해 필수입니다. (1:N 관계)</p>
+                    </div>
+
+                    <div id="details-table-cart" class="hidden">
+                        <h4 class="font-bold text-lg text-red-700">Cart (장바구니)</h4>
+                        <p><b>[설계 의도]</b><br>
+                           `User`와 `Product`의 관계를 '연결'하는 중간 테이블 (Junction Table)입니다. 이 테이블이 없으면 "누가 무엇을 샀는지"를 기록할 수 없습니다.</p>
+                        <p><b>[핵심 컬럼]</b><br>
+                           - `user_id (FK)`: `User` 테이블을 참조합니다. "누구의 장바구니인가?"<br>
+                           - `prod_id (FK)`: `Product` 테이블을 참조합니다. "무슨 상품을 담았는가?"</p>
+                    </div>
+
+                    <div id="details-rel-user-prod" class="hidden">
+                        <h4 class="font-bold text-lg text-blue-700">관계: User (1) → (N) Product</h4>
+                        <p><b>[설계 의도]</b> "한 명의 사용자(1)는 여러 개의 상품(N)을 등록할 수 있다."</button>
+                        <p><b>[구현]</b><br>
+                           `Product` 테이블이 `uploader_id (FK)` 컬럼을 가져서, 자신이 어떤 `User`에 속해있는지(누가 올렸는지)를 식별합니다.</p>
+                    </div>
+                    
+                    <div id="details-rel-user-cart" class="hidden">
+                        <h4 class="font-bold text-lg text-blue-700">관계: User (1) → (N) Cart</h4>
+                        <p><b>[설계 의도]</b> "한 명의 사용자(1)는 여러 개의 장바구니 항목(N)을 가질 수 있다."</button>
+                        <p><b>[구현]</b><br>
+                           `Cart` 테이블이 `user_id (FK)` 컬럼을 가져서, 이 항목이 "누구의" 장바구니에 속해있는지를 식별합니다.</p>
+                    </div>
+                    
+                    <div id="details-rel-prod-cart" class="hidden">
+                        <h4 class="font-bold text-lg text-blue-700">관계: Product (1) → (N) Cart</h4>
+                        <p><b>[설계 의도]</b> "하나의 상품(1)은 여러 명의 장바구니(N)에 담길 수 있다."</button>
+                        <p><b>[구현]</b><br>
+                           `Cart` 테이블이 `prod_id (FK)` 컬럼을 가져서, 이 항목이 "어떤" 상품인지를 식별합니다.</p>
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+    
+    <!-- (C) JavaScript (인터랙션 담당 - 이전 파일과 100% 동일) -->
+<script>
+  // 현재 활성화된 노드와 설명의 ID 추적
+  let activeNodeId = null;
+  let activeDetailsId = null;
+
+  // 기본 설명 요소
+  const defaultInspector = document.getElementById('inspector-default');
+  // 설명 패널
+  const inspectorDetails = document.getElementById('inspector-details');
+
+  function showDetails(key) {
+    // 1. 이전 활성화 노드 해제
+    if (activeNodeId) {
+      const prevNode = document.getElementById(activeNodeId);
+      if (prevNode) prevNode.classList.remove('active');
+    }
+
+    // 2. 이전에 표시된 상세 내용 제거 (템플릿은 그대로 유지)
+    inspectorDetails.querySelectorAll('.displayed').forEach(el => el.remove());
+    defaultInspector.classList.add('hidden');
+
+    // 3. 새 노드와 설명 선택
+    const newNodeId = `node-${key}`;
+    const newDetailsId = `details-${key}`;
+    const newNode = document.getElementById(newNodeId);
+    const newDetails = document.getElementById(newDetailsId);
+
+    if (newNode && newDetails) {
+      // 노드 활성화
+      newNode.classList.add('active');
+
+      // 상세 설명 복제 및 표시
+      const clone = newDetails.cloneNode(true);
+      clone.classList.remove('hidden');
+      clone.classList.add('displayed');
+      inspectorDetails.appendChild(clone);
+
+      // 상태 업데이트
+      activeNodeId = newNodeId;
+      activeDetailsId = newDetailsId;
+    } else {
+      // 기본 설명으로 리셋
+      inspectorDetails.querySelectorAll('.displayed').forEach(el => el.remove());
+      defaultInspector.classList.remove('hidden');
+      activeNodeId = null;
+      activeDetailsId = null;
+    }
+  }
+</script>
+
+
+</body>
+</html>
