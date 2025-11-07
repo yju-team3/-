@@ -11,7 +11,7 @@ JSP 기반 쇼핑몰 구조를 설계하고, 사용자 흐름도 및 ERD를 Merm
 
 교수님께서 GitHub에서 바로 클릭하여 보실 수 있도록, HTML/CSS/JS로 제작한 '작동하는' 프로토타입을 첨부합니다.
 
-* **[ 🔗 프로토타입 실행 (Click!)](https://htmlpreview.github.io/?https://github.com/yju-team3/dev-wireframe/blob/main/첨부자료/인터랙티브 프로토타입.html)**
+https://github.com/yju-team3/-/blob/main/docs/protytype.html
 
 ---
 * **[ 🔗 프로토타입 원본 코드 보기 (GitHub)](./첨부자료/인터랙티브 프로토타입.html)**
