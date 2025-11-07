@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev-Class 인터랙티브 사용자 흐름도</title>
+    
+    <!-- 1. Tailwind CSS 로드 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* 2. 커스텀 스타일 */
+        
+        /* 노드(단계) 기본 스타일 */
+        .node {
+            border: 2px solid #cbd5e1; /* slate-300 */
+            padding: 10px 16px;
+            border-radius: 8px; /* rounded-lg */
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1); /* shadow-sm */
+            text-align: center;
+            min-width: 120px;
+        }
+        
+        /* JSP 페이지 노드 스타일 */
+        .node-jsp {
+            border-color: #3b82f6; /* blue-500 */
+            background-color: #eff6ff; /* blue-50 */
+        }
+        
+        /* Servlet(.do) 노드 스타일 */
+        .node-servlet {
+            border-color: #16a34a; /* green-600 */
+            background-color: #f0fdf4; /* green-50 */
+            transform: skew(-10deg); /* 살짝 기울여서 처리 과정처럼 보이게 */
+        }
+
+        /* 활성화된 노드 스타일 */
+        .node.active {
+            box-shadow: 0 0 0 3px #3b82f6, 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* blue-500 링 + shadow-md */
+            transform: scale(1.05) skew(0deg); /* 선택 시 기울임 펴기 */
+        }
+        
+        /* 화살표 스타일 */
+        .arrow {
+            /* Tailwind @apply 로 대체 */
+            color: #94a3b8; /* slate-400 */
+            font-size: 24px; /* text-2xl */
+            margin: 8px 0;
+            text-align: center;
+        }
+
+        /* 설명 패널의 P 태그 스타일 */
+        #inspector-details p {
+            margin-top: 8px; /* mt-2 */
+            font-size: 14px; /* text-sm */
+            color: #475569; /* slate-600 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden border border-gray-200">
+        
+        <!-- (A) 헤더 -->
+        <header class="bg-gray-800 text-white p-5 border-b border-gray-700">
+            <h1 class="text-2xl font-bold">Dev-Class 인터랙티브 사용자 흐름도</h1>
+            <p class="text-sm text-gray-300">각 단계를 클릭하여 상세 설명을 확인하세요.</p>
+        </header>
+
+        <!-- (B) 메인 컨텐츠 (플로우차트 + 설명 패널) -->
+        <div class="flex flex-col md:flex-row">
+            
+            <!-- (B-1) 플로우차트 영역 -->
+            <div class="w-full md:w-2/3 p-6 space-y-2 overflow-x-auto">
+                
+                <!-- 1. 비로그인 사용자 흐름 -->
+                <h2 class="text-lg font-semibold text-gray-700 border-b pb-2">1. 비로그인 사용자</h2>
+                <div class="flex flex-col items-center">
+                    
+                    <div id="node-index" class="node node-jsp" onclick="showDetails('index')">
+                        index.jsp
+                    </div>
+                    <div class="arrow">↓</div>
+                    
+                    <!-- 분기 (로그인 / 회원가입 / 목록보기) -->
+                    <div class="grid grid-cols-3 gap-4 w-full max-w-lg">
+                        
+                        <!-- 회원가입 흐름 -->
+                        <div class="flex flex-col items-center">
+                            <div id="node-register-jsp" class="node node-jsp" onclick="showDetails('register-jsp')">
+                                register.jsp
+                            </div>
+                            <div class="arrow">↓ <span class="text-xs text-gray-500">(Submit)</span></div>
+                            <div id="node-register-do" class="node node-servlet" onclick="showDetails('register-do')">
+                                register.do
+                            </div>
+                            <div class="arrow">↓ <span class="text-xs text-gray-500">(Redirect)</span></div>
+                            <div id="node-login-jsp" class="node node-jsp" onclick="showDetails('login-jsp')">
+                                login.jsp
+                            </div>
+                        </div>
+                        
+                        <!-- 로그인 흐름 -->
+                        <div class="flex flex-col items-center">
+                            <div class="node node-jsp" onclick="showDetails('login-jsp')">
+                                (login.jsp)
+                            </div>
+                            <div class="arrow">↓ <span class="text-xs text-gray-500">(Submit)</span></div>
+                            <div id="node-login-do" class="node node-servlet" onclick="showDetails('login-do')">
+                                login.do
+                            </div>
+                            <div class="arrow">↓ <span class="text-xs text-red-500">(Fail)</span></div>
+                            <div class="node node-jsp" onclick="showDetails('login-jsp')">
+                                (login.jsp)
+                            </div>
+                        </div>
+
+                        <!-- 상품목록 흐름 -->
+                        <div class="flex flex-col items-center">
+                            <div id="node-product-list-do-guest" class="node node-servlet" onclick="showDetails('product-list-do')">
+                                product_list.do
+                            </div>
+                            <div class="arrow">↓ <span class="text-xs text-gray-500">(Forward)</span></div>
+                            <div id="node-product-list-jsp-guest" class="node node-jsp" onclick="showDetails('product-list-jsp')">
+                                product_list.jsp
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow text-2xl font-bold text-blue-600">↓ ↓ ↓ (로그인 성공) ↓ ↓ ↓</div>
+
+                <!-- 2. 로그인 사용자 흐름 -->
+                <h2 class="text-lg font-semibold text-gray-700 border-b pb-2 mt-6">2. 로그인 사용자</h2>
+                <div class="flex flex-col items-center">
+                    <div id="node-index-authed" class="node node-jsp" onclick="showDetails('index-authed')">
+                        index.jsp (로그인 상태)
+                    </div>
+                    
+                    <!-- 분기 -->
+                    <div class="grid grid-cols-3 gap-4 w-full max-w-2xl mt-4">
+                        
+                        <!-- 상품 등록 흐름 -->
+                        <div class="flex flex-col items-center space-y-2">
+                            <div id="node-product-upload-jsp" class="node node-jsp" onclick="showDetails('product-upload-jsp')">
+                                product_upload.jsp
+                            </div>
+                            <div class="arrow">↓ <span class="text-xs text-gray-500">(Submit)</span></div>
+                            <div id="node-product-upload-do" class="node node-servlet" onclick="showDetails('product-upload-do')">
+                                product_upload.do
+                            </div>
+                            <div class="arrow">↓ <span class="text-xs text-gray-500">(Redirect)</span></div>
+                            <div id="node-product-list-do-authed" class="node node-servlet" onclick="showDetails('product-list-do')">
+                                product_list.do
+                            </div>
+                        </div>
+                        
+                        <!-- 장바구니/결제 흐름 -->
+                        <div class="flex flex-col items-center space-y-2">
+                            <div class="node node-servlet" onclick="showDetails('product-list-do')">
+                                (product_list.do)
+                            </div>
+                            <div class="arrow">↓ <span class="text-xs text-gray-500">(Forward)</span></div>
+                            <div class="node node-jsp" onclick="showDetails('product-list-jsp')">
+                                (product_list.jsp)
+                            </div>
+                            <div class="arrow">↓ <span class="text-xs text-gray-500">(담기 Click)</span></div>
+                            <div id="node-cart-do" class="node node-servlet" onclick="showDetails('cart-do')">
+                                cart.do
+                            </div>
+                            <div class="arrow">↓ <span class="text-xs text-gray-500">(Redirect)</span></div>
+                            <div id="node-cart-list-do" class="node node-servlet" onclick="showDetails('cart-list-do')">
+                                cart_list.do
+                            </div>
+                            <div class="arrow">↓ <span class="text-xs text-gray-500">(결제 Click)</span></div>
+                            <div id="node-order-do" class="node node-servlet" onclick="showDetails('order-do')">
+                                order.do
+                            </div>
+                            <div class="arrow">↓ <span class="text-xs text-gray-500">(Redirect)</span></div>
+                            <div id="node-order-complete-jsp" class="node node-jsp" onclick="showDetails('order-complete-jsp')">
+                                order_complete.jsp
+                            </div>
+                        </div>
+
+                        <!-- 로그아웃 흐름 -->
+                        <div class="flex flex-col items-center space-y-2">
+                            <div id="node-logout-do" class="node node-servlet" onclick="showDetails('logout-do')">
+                                logout.do
+                            </div>
+                            <div class="arrow">↓ <span class="text-xs text-gray-500">(Redirect)</span></div>
+                            <div class="node node-jsp" onclick="showDetails('index')">
+                                (index.jsp)
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- (B-2) 설명 패널 (Inspector) -->
+            <aside class="w-full md:w-1/3 bg-gray-50 p-6 border-l border-gray-200">
+                <h3 class="text-xl font-semibold text-gray-800">상세 설명 (Inspector)</h3>
+                <div id="inspector-details" class="mt-4 p-4 min-h-[300px] bg-white rounded-md border border-gray-300 shadow-inner">
+                    <!-- JS가 이 안에 내용을 채울 것입니다 -->
+                    <p id="inspector-default" class="text-gray-500">흐름도의 각 단계를 클릭하면 이곳에 상세 설명이 나타납니다.</p>
+                    
+                    <!-- 각 단계별 설명 (숨겨진 템플릿) -->
+                    <div id="details-index" class="hidden">
+                        <h4 class="font-bold text-lg text-blue-600">index.jsp</h4>
+                        <p>메인 페이지입니다. `header.jsp`를 include하며, 로그인 상태에 따라 다른 메뉴를 보여줍니다.</p>
+                    </div>
+                    <div id="details-register-jsp" class="hidden">
+                        <h4 class="font-bold text-lg text-blue-600">register.jsp</h4>
+                        <p>회원가입 폼(View)입니다. 사용자가 ID, PW, 이름을 입력합니다.</p>
+                    </div>
+                    <div id="details-register-do" class="hidden">
+                        <h4 class="font-bold text-lg text-green-700">register.do (RegisterServlet)</h4>
+                        <p><b>Controller</b>입니다. 폼 데이터를 받아 `UserDAO`를 통해 DB에 `INSERT`합니다.</p>
+                        <p>완료 후 `login.jsp`로 `Redirect` (PRG 패턴)합니다.</p>
+                    </div>
+                    <div id="details-login-jsp" class="hidden">
+                        <h4 class="font-bold text-lg text-blue-600">login.jsp</h4>
+                        <p>로그인 폼(View)입니다.</p>
+                    </div>
+                    <div id="details-login-do" class="hidden">
+                        <h4 class="font-bold text-lg text-green-700">login.do (LoginServlet)</h4>
+                        <p><b>Controller</b>입니다. `UserDAO`로 `SELECT` 검증을 수행합니다.</p>
+                        <p><b>성공 시:</b> `HttpSession`을 생성하고 'userId'를 저장한 뒤 `index.jsp`로 `Redirect`합니다.</p>
+                        <p><b>실패 시:</b> `login.jsp`로 `Redirect`합니다.</p>
+                    </div>
+                    <div id="details-index-authed" class="hidden">
+                        <h4 class="font-bold text-lg text-blue-600">index.jsp (로그인 상태)</h4>
+                        <p>`sessionScope.userId`가 존재하므로 `header.jsp`가 '내 장바구니', '상품 등록' 메뉴를 활성화합니다.</p>
+                    </div>
+                    <div id="details-product-list-do" class="hidden">
+                        <h4 class="font-bold text-lg text-green-700">product_list.do (ProductListServlet)</h4>
+                        <p><b>Controller</b>입니다. `ProductDAO`를 통해 DB에서 `SELECT *` (상품 목록)을 가져옵니다.</p>
+                        <p>가져온 `List`를 `request.setAttribute`에 담아 `product_list.jsp`로 `Forward`합니다.</p>
+                    </div>
+                    <div id="details-product-list-jsp" class="hidden">
+                        <h4 class="font-bold text-lg text-blue-600">product_list.jsp</h4>
+                        <p>상품 목록(View)입니다. JSTL `<c:forEach>`를 사용해 Controller가 넘겨준 `requestScope.productList`를 화면에 렌더링합니다.</p>
+                    </div>
+                    <div id="details-product-upload-jsp" class="hidden">
+                        <h4 class="font-bold text-lg text-blue-600">product_upload.jsp</h4>
+                        <p>상품 등록 폼(View)입니다. `enctype="multipart/form-data"` 속성이 필수입니다.</p>
+                    </div>
+                    <div id="details-product-upload-do" class="hidden">
+                        <h4 class="font-bold text-lg text-green-700">product_upload.do (ProductUploadServlet)</h4>
+                        <p><b>Controller</b>입니다. `commons-fileupload` 라이브러리를 사용해 폼 데이터(텍스트)와 '파일'을 분리하여 파싱합니다.</p>
+                        <p>파일은 `C:/jsp_upload` 경로에 `UUID`로 저장하고, 파일 정보와 폼 데이터는 `ProductDAO`를 통해 DB에 `INSERT`합니다.</p>
+                        <p>완료 후 `product_list.do`로 `Redirect`합니다.</p>
+                    </div>
+                    <div id="details-cart-do" class="hidden">
+                        <h4 class="font-bold text-lg text-green-700">cart.do (CartServlet)</h4>
+                        <p><b>Controller</b>입니다. 세션에서 `userId`를, 파라미터에서 `prodId`를 가져옵니다.</p>
+                        <p>`CartDAO`를 통해 `Cart` 테이블에 `INSERT` (장바구니 담기)를 수행합니다.</p>
+                        <p>완료 후 `cart_list.do`로 `Redirect`합니다.</p>
+                    </div>
+                    <div id="details-cart-list-do" class="hidden">
+                        <h4 class="font-bold text-lg text-green-700">cart_list.do (CartListServlet)</h4>
+                        <p><b>Controller</b>입니다. 세션에서 `userId`를 가져옵니다.</p>
+                        <p>`CartDAO`를 통해 `Cart`와 `Product` 테이블을 `JOIN`하여 '내 장바구니 목록'을 `SELECT`합니다.</p>
+                        <p>결과 `List`를 `request.setAttribute`에 담아 `cart_list.jsp`로 `Forward`합니다.</p>
+                    </div>
+                    <div id="details-order-do" class="hidden">
+                        <h4 class="font-bold text-lg text-green-700">order.do (OrderServlet)</h4>
+                        <p><b>Controller</b>입니다. (모의 결제)</p>
+                        <p>`CartDAO`를 통해 `DELETE FROM Cart WHERE user_id = ?` (장바구니 비우기)를 실행합니다.</p>
+                        <p>완료 후 `order_complete.jsp`로 `Redirect`합니다.</p>
+                    </div>
+                    <div id="details-order-complete-jsp" class="hidden">
+                        <h4 class="font-bold text-lg text-blue-600">order_complete.jsp</h4>
+                        <p>결제 완료(View)입니다. 사용자에게 완료 메시지를 보여줍니다.</p>
+                    </div>
+                    <div id="details-logout-do" class="hidden">
+                        <h4 class="font-bold text-lg text-green-700">logout.do (LogoutServlet)</h4>
+                        <p><b>Controller</b>입니다. `session.invalidate()`를 호출하여 세션을 파기합니다.</p>
+                        <p>완료 후 `index.jsp`로 `Redirect`합니다.</p>
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+    
+    <!-- (C) JavaScript (인터랙션 담당) -->
+   <script>
+  let activeNodeId = null;
+  let activeDetailsId = null;
+
+  const defaultInspector = document.getElementById('inspector-default');
+  const inspectorDetails = document.getElementById('inspector-details');
+
+  function showDetails(key) {
+    // 1. 이전 활성 노드 해제
+    if (activeNodeId) {
+      const prevNode = document.getElementById(activeNodeId);
+      if (prevNode) prevNode.classList.remove('active');
+    }
+
+    // 2. 이전에 표시된 상세 내용 제거 (템플릿은 유지)
+    inspectorDetails.querySelectorAll('.displayed').forEach(el => el.remove());
+    defaultInspector.classList.add('hidden');
+
+    // 3. 새로 클릭된 노드/상세 찾기
+    const newNodeId = `node-${key}`;
+    const newDetailsId = `details-${key}`;
+    const newNode = document.getElementById(newNodeId);
+    const newDetails = document.getElementById(newDetailsId);
+
+    if (newNode && newDetails) {
+      // 노드 강조
+      newNode.classList.add('active');
+
+      // 상세 설명 복제 및 표시
+      const clone = newDetails.cloneNode(true);
+      clone.classList.remove('hidden');
+      clone.classList.add('displayed');
+      inspectorDetails.appendChild(clone);
+
+      // 상태 업데이트
+      activeNodeId = newNodeId;
+      activeDetailsId = newDetailsId;
+    } else {
+      // 일치하는 게 없으면 기본 설명 표시로 복귀
+      inspectorDetails.querySelectorAll('.displayed').forEach(el => el.remove());
+      defaultInspector.classList.remove('hidden');
+      activeNodeId = null;
+      activeDetailsId = null;
+    }
+  }
+</script>
+
+
+</body>
+</html>
