@@ -12,7 +12,8 @@
     
     *(↑ 이 링크가 바로 학생이 원한 '시각화' 링크입니다. `htmlpreview`가 GitHub 주소를 감싸고 있습니다.)*
 
----
+---- [인터랙티브 와이어프레임 실행](https://htmlpreview.github.io/?https://github.com/yju-team3/-/blob/main/docs/prototype.html)
+
 
 * **[ 🔗 프로토타입 원본 코드 보기 (GitHub)](./docs/prototype.html)**
     
