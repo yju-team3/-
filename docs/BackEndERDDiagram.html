@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <title>요청 흐름 다이어그램 - JSP/Servlet 디지털 컨텐츠 마켓</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Tailwind (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-100 text-slate-900">
+<div class="min-h-screen flex items-center justify-center px-4 py-10">
+    <div class="w-full max-w-6xl bg-white shadow-xl rounded-3xl p-6 md:p-10 border border-slate-200">
+        <!-- 헤더 -->
+        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold text-slate-900">
+                    요청 흐름 다이어그램
+                </h1>
+                <p class="text-sm md:text-base text-slate-500 mt-1">
+                    클라이언트 → Controller(Servlet) → DAO/DTO → JSP(View) → 응답 흐름
+                </p>
+            </div>
+            <span class="inline-flex items-center gap-2 text-xs md:text-sm px-3 py-1 rounded-full bg-slate-900 text-white">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>디지털 컨텐츠 마켓 · Request Flow</span>
+            </span>
+        </header>
+
+        <div class="grid lg:grid-cols-[1.1fr,1.4fr] gap-8">
+            <!-- 왼쪽: 단계 선택 -->
+            <section>
+                <h2 class="text-sm font-semibold text-slate-500 mb-3 uppercase tracking-wide">
+                    단계별 요청 흐름
+                </h2>
+                <div class="space-y-2" id="step-list">
+                    <!-- 각 버튼은 data-step 으로 구분 -->
+                    <button
+                        class="step-btn w-full text-left px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 hover:border-orange-400 hover:bg-orange-50 transition flex gap-3"
+                        data-step="1"
+                    >
+                        <div class="flex-none w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-semibold">
+                            1
+                        </div>
+                        <div>
+                            <div class="text-sm font-semibold text-slate-900">
+                                클라이언트 요청
+                            </div>
+                            <div class="text-xs text-slate-500 mt-0.5">
+                                브라우저에서 URL 요청, 쿼리/폼 데이터 전송
+                            </div>
+                        </div>
+                    </button>
+
+                    <button
+                        class="step-btn w-full text-left px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 hover:border-orange-400 hover:bg-orange-50 transition flex gap-3"
+                        data-step="2"
+                    >
+                        <div class="flex-none w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-semibold">
+                            2
+                        </div>
+                        <div>
+                            <div class="text-sm font-semibold text-slate-900">
+                                Controller에서 요청 파싱 &amp; DTO 생성
+                            </div>
+                            <div class="text-xs text-slate-500 mt-0.5">
+                                파라미터를 읽어 DTO에 담고, 어떤 DAO를 호출할지 결정
+                            </div>
+                        </div>
+                    </button>
+
+                    <button
+                        class="step-btn w-full text-left px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 hover:border-orange-400 hover:bg-orange-50 transition flex gap-3"
+                        data-step="3"
+                    >
+                        <div class="flex-none w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-semibold">
+                            3
+                        </div>
+                        <div>
+                            <div class="text-sm font-semibold text-slate-900">
+                                DAO를 통한 DB 접근
+                            </div>
+                            <div class="text-xs text-slate-500 mt-0.5">
+                                DAO가 SQL 실행, 결과를 DTO(또는 리스트)에 담아 반환
+                            </div>
+                        </div>
+                    </button>
+
+                    <button
+                        class="step-btn w-full text-left px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 hover:border-orange-400 hover:bg-orange-50 transition flex gap-3"
+                        data-step="4"
+                    >
+                        <div class="flex-none w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-semibold">
+                            4
+                        </div>
+                        <div>
+                            <div class="text-sm font-semibold text-slate-900">
+                                Controller → JSP 포워딩
+                            </div>
+                            <div class="text-xs text-slate-500 mt-0.5">
+                                요청 속성(request)에 DTO/리스트를 담고 JSP로 forward
+                            </div>
+                        </div>
+                    </button>
+
+                    <button
+                        class="step-btn w-full text-left px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 hover:border-orange-400 hover:bg-orange-50 transition flex gap-3"
+                        data-step="5"
+                    >
+                        <div class="flex-none w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-semibold">
+                            5
+                        </div>
+                        <div>
+                            <div class="text-sm font-semibold text-slate-900">
+                                JSP에서 데이터 렌더링
+                            </div>
+                            <div class="text-xs text-slate-500 mt-0.5">
+                                JSTL/EL로 DTO 데이터를 화면에 출력, HTML 완성
+                            </div>
+                        </div>
+                    </button>
+
+                    <button
+                        class="step-btn w-full text-left px-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 hover:border-orange-400 hover:bg-orange-50 transition flex gap-3"
+                        data-step="6"
+                    >
+                        <div class="flex-none w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-semibold">
+                            6
+                        </div>
+                        <div>
+                            <div class="text-sm font-semibold text-slate-900">
+                                HTML 응답 반환
+                            </div>
+                            <div class="text-xs text-slate-500 mt-0.5">
+                                완성된 HTML이 브라우저로 돌아가서 화면에 렌더링
+                            </div>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- 현재 단계 설명 -->
+                <div id="step-detail" class="mt-5 text-xs md:text-sm text-slate-600 bg-slate-50 border border-dashed border-slate-200 rounded-2xl px-4 py-3">
+                    왼쪽 단계 버튼을 클릭하면, 오른쪽 다이어그램에서 해당 단계에
+                    관련된 박스와 화살표가 강조됩니다.
+                </div>
+            </section>
+
+            <!-- 오른쪽: 다이어그램 -->
+            <section aria-label="요청 흐름 다이어그램">
+                <h2 class="text-sm font-semibold text-slate-500 mb-3 uppercase tracking-wide">
+                    구조 다이어그램
+                </h2>
+
+                <div class="bg-slate-950 text-slate-50 rounded-3xl p-4 md:p-6 relative overflow-hidden">
+                    <!-- 배경 데코 -->
+                    <div class="pointer-events-none absolute -top-32 -right-24 w-64 h-64 rounded-full bg-orange-500/10 blur-3xl"></div>
+                    <div class="pointer-events-none absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-sky-500/10 blur-3xl"></div>
+
+                    <div class="relative space-y-5 md:space-y-6">
+                        <!-- 1줄: 클라이언트 → Controller → JSP → 클라이언트 -->
+                        <div class="flex flex-col gap-4">
+                            <div class="flex items-center justify-between gap-2 md:gap-3">
+                                <div id="node-client-req"
+                                     class="node flex-1 min-w-[90px] text-center px-3 py-2 md:px-4 md:py-3 rounded-2xl bg-slate-900 border border-slate-600 text-xs md:text-sm">
+                                    클라이언트<br class="hidden md:block">(브라우저)
+                                </div>
+
+                                <div id="arrow-client-ctrl"
+                                     class="arrow flex-none text-lg md:text-xl text-slate-400">
+                                    →
+                                </div>
+
+                                <div id="node-controller"
+                                     class="node flex-1 min-w-[110px] text-center px-3 py-2 md:px-4 md:py-3 rounded-2xl bg-slate-900 border border-slate-600 text-xs md:text-sm">
+                                    Controller<br class="hidden md:block">(Servlet)
+                                </div>
+
+                                <div id="arrow-ctrl-jsp"
+                                     class="arrow flex-none text-lg md:text-xl text-slate-400">
+                                    →
+                                </div>
+
+                                <div id="node-jsp"
+                                     class="node flex-1 min-w-[110px] text-center px-3 py-2 md:px-4 md:py-3 rounded-2xl bg-slate-900 border border-slate-600 text-xs md:text-sm">
+                                    JSP<br class="hidden md:block">(View)
+                                </div>
+
+                                <div id="arrow-jsp-client"
+                                     class="arrow flex-none text-lg md:text-xl text-slate-400">
+                                    →
+                                </div>
+
+                                <div id="node-client-res"
+                                     class="node flex-1 min-w-[90px] text-center px-3 py-2 md:px-4 md:py-3 rounded-2xl bg-slate-900 border border-slate-600 text-xs md:text-sm">
+                                    클라이언트<br class="hidden md:block">(HTML 응답)
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2줄: Controller ↔ DAO ↔ DB -->
+                        <div class="flex flex-col gap-3">
+                            <div class="flex items-center justify-center gap-2 md:gap-3 text-[10px] md:text-xs text-slate-400">
+                                <span>비즈니스 처리 &amp; 데이터 엑세스</span>
+                            </div>
+                            <div class="flex items-center justify-center gap-2 md:gap-3">
+                                <div id="node-controller-bottom"
+                                     class="node flex-1 max-w-[150px] text-center px-3 py-2 md:px-4 md:py-3 rounded-2xl bg-slate-900 border border-slate-600 text-xs md:text-sm">
+                                    Controller
+                                </div>
+
+                                <div id="arrow-ctrl-dao"
+                                     class="arrow flex-none text-lg md:text-xl text-slate-400">
+                                    →
+                                </div>
+
+                                <div id="node-dto"
+                                     class="node flex-1 max-w-[150px] text-center px-3 py-2 md:px-4 md:py-3 rounded-2xl bg-slate-900 border border-slate-600 text-xs md:text-sm">
+                                    DTO<br class="hidden md:block">(데이터 전달 객체)
+                                </div>
+
+                                <div id="arrow-dto-dao"
+                                     class="arrow flex-none text-lg md:text-xl text-slate-400">
+                                    →
+                                </div>
+
+                                <div id="node-dao"
+                                     class="node flex-1 max-w-[150px] text-center px-3 py-2 md:px-4 md:py-3 rounded-2xl bg-slate-900 border border-slate-600 text-xs md:text-sm">
+                                    DAO<br class="hidden md:block">(DB 접근)
+                                </div>
+
+                                <div id="arrow-dao-db"
+                                     class="arrow flex-none text-lg md:text-xl text-slate-400">
+                                    →
+                                </div>
+
+                                <div id="node-db"
+                                     class="node flex-1 max-w-[150px] text-center px-3 py-2 md:px-4 md:py-3 rounded-2xl bg-slate-900 border border-slate-600 text-xs md:text-sm">
+                                    DB<br class="hidden md:block">(MySQL)
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 하단 설명 -->
+                        <div class="mt-4 pt-3 border-t border-slate-700 text-[11px] md:text-xs text-slate-300">
+                            <span class="font-semibold text-orange-300">TIP.</span>
+                            Controller는 모든 요청의 진입점이며, DAO는 DB 전담, DTO는
+                            데이터 전달 전용, JSP는 화면 출력 전용으로 역할을 분리합니다.
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 단계별로 강조할 노드/화살표 매핑
+    const stepMap = {
+        1: {
+            nodes: ["node-client-req"],
+            arrows: ["arrow-client-ctrl"],
+            detail: "1단계: 브라우저(클라이언트)가 URL을 요청하고, 쿼리 스트링이나 폼 데이터가 함께 전송됩니다."
+        },
+        2: {
+            nodes: ["node-controller", "node-controller-bottom", "node-dto"],
+            arrows: ["arrow-client-ctrl", "arrow-ctrl-dao", "arrow-dto-dao"],
+            detail: "2단계: Controller(Servlet)가 요청 파라미터를 읽어 DTO에 담고, 어떤 DAO를 호출할지 결정합니다."
+        },
+        3: {
+            nodes: ["node-dao", "node-db", "node-dto"],
+            arrows: ["arrow-dto-dao", "arrow-dao-db"],
+            detail: "3단계: DAO가 DB에 SQL을 실행하고, 조회/저장 결과를 DTO(또는 리스트)에 담아 Controller로 돌려줍니다."
+        },
+        4: {
+            nodes: ["node-controller", "node-controller-bottom", "node-jsp"],
+            arrows: ["arrow-ctrl-jsp"],
+            detail: "4단계: Controller는 DTO/리스트를 request 속성에 저장하고, JSP로 forward하여 화면 렌더링을 준비합니다."
+        },
+        5: {
+            nodes: ["node-jsp"],
+            arrows: ["arrow-ctrl-jsp", "arrow-jsp-client"],
+            detail: "5단계: JSP는 JSTL/EL을 사용해 DTO 내용을 HTML로 출력하고, 완성된 화면을 만든 뒤 응답으로 보낼 준비를 합니다."
+        },
+        6: {
+            nodes: ["node-client-res"],
+            arrows: ["arrow-jsp-client"],
+            detail: "6단계: 완성된 HTML 응답이 클라이언트(브라우저)에 도착하고, 사용자는 디지털 컨텐츠 마켓 화면을 보게 됩니다."
+        }
+    };
+
+    const nodeEls = document.querySelectorAll(".node");
+    const arrowEls = document.querySelectorAll(".arrow");
+    const stepButtons = document.querySelectorAll(".step-btn");
+    const detailBox = document.getElementById("step-detail");
+
+    function clearActive() {
+        nodeEls.forEach(el => {
+            el.classList.remove("ring-2", "ring-orange-400", "bg-slate-800", "shadow-lg");
+        });
+        arrowEls.forEach(el => {
+            el.classList.remove("text-orange-400");
+            el.classList.add("text-slate-400");
+        });
+        stepButtons.forEach(btn => {
+            btn.classList.remove("border-orange-400", "bg-orange-50");
+        });
+    }
+
+    function activateStep(step) {
+        const data = stepMap[step];
+        if (!data) return;
+
+        clearActive();
+
+        // 버튼 스타일
+        const btn = document.querySelector(`.step-btn[data-step="${step}"]`);
+        if (btn) {
+            btn.classList.add("border-orange-400", "bg-orange-50");
+        }
+
+        // 노드 강조
+        data.nodes.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.add("ring-2", "ring-orange-400", "bg-slate-800", "shadow-lg");
+            }
+        });
+
+        // 화살표 강조
+        data.arrows.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.remove("text-slate-400");
+                el.classList.add("text-orange-400");
+            }
+        });
+
+        // 설명 텍스트
+        detailBox.textContent = data.detail;
+    }
+
+    // 버튼 클릭 이벤트 등록
+    stepButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const step = btn.getAttribute("data-step");
+            activateStep(step);
+        });
+    });
+
+    // 처음 로드 시 1단계 자동 선택
+    activateStep(1);
+</script>
+</body>
+</html>
